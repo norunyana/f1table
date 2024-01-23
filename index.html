@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-table {
-  font-family: Arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-th {
-  cursor: pointer;
-}
-</style>
+    <style>
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #0044cc;
+            color: white;
+            cursor: pointer;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .headerSortUp:after {
+            content: ' ▲';
+        }
+        .headerSortDown:after {
+            content: ' ▼';
+        }
+    </style>
 </head>
 <body>
 
 <h2>F1 coureurs leeftijd, lengte en gewicht</h2>
 <table id="f1Table">
-  <tr>
-    <th onclick="sortTable(0)">Coureur</th>
-    <th onclick="sortTable(1)">Team</th>
-    <th onclick="sortTable(2, 'int')">Leeftijd</th>
-    <th onclick="sortTable(3, 'int')">Lengte (cm)</th>
-    <th onclick="sortTable(4, 'int')">Gewicht (kg)</th>
-  </tr>
+    <tr>
+        <th onclick="sortTable(0)">Coureur</th>
+        <th onclick="sortTable(1)">Team</th>
+        <th onclick="sortTable(2, 'int')">Leeftijd</th>
+        <th onclick="sortTable(3, 'int')">Lengte (cm)</th>
+        <th onclick="sortTable(4, 'int')">Gewicht (kg)</th>
+    </tr>
   <tr><td>Max Verstappen</td><td>Red Bull Racing</td><td>26</td><td>181</td><td>72</td></tr>
   <tr><td>Sergio Perez</td><td>Red Bull Racing</td><td>34</td><td>173</td><td>63</td></tr>
   <tr><td>Lewis Hamilton</td><td>Mercedes</td><td>39</td><td>174</td><td>73</td></tr>
@@ -51,56 +66,55 @@ th {
 </table>
 
 <script>
-function sortTable(n, type = 'string') {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("f1Table");
-  switching = true;
-  dir = "asc"; 
-  while (switching) {
-    switching = false;
-    rows = table.rows;
-    for (i = 1; i < (rows.length - 1); i++) {
-      shouldSwitch = false;
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
-      if (type === 'int') {
-        if (dir == "asc") {
-          if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (dir == "desc") {
-          if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
-            shouldSwitch = true;
-            break;
-          }
-        }
-      } else {
-        if (dir == "asc") {
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (dir == "desc") {
-          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        }
-      }
-    }
-    if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-      switchcount++;      
-    } else {
-      if (switchcount == 0 && dir == "asc") {
-        dir = "desc";
+    function sortTable(column, type = 'string') {
+        var table, rows, switching, i, x, y, shouldSwitch, dir = "asc", switchcount = 0;
+        table = document.getElementById("f1Table");
         switching = true;
-      }
+        // Clear previous arrows
+        var headers = table.getElementsByTagName("TH");
+        for (i = 0; i < headers.length; i++) {
+            headers[i].classList.remove("headerSortUp", "headerSortDown");
+        }
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[column];
+                y = rows[i + 1].getElementsByTagName("TD")[column];
+                // Check if the rows should switch place, depending on the direction, asc or desc:
+                if (type === 'int') {
+                    if (dir == "asc" && parseInt(x.innerHTML) > parseInt(y.innerHTML) ||
+                        dir == "desc" && parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else {
+                    if (dir == "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() ||
+                        dir == "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+        // Add arrow to the sorted column
+        if (dir == "asc") {
+            table.getElementsByTagName("TH")[column].classList.add("headerSortUp");
+        } else {
+            table.getElementsByTagName("TH")[column].classList.add("headerSortDown");
+        }
     }
-  }
-}
 </script>
 
 </body>
