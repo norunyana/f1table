@@ -14,7 +14,7 @@
             padding: 8px;
         }
         th {
-            background-color: #0044cc;
+            background-color: #303030; /* Antraciet kleur */
             color: white;
             cursor: pointer;
         }
@@ -24,24 +24,21 @@
         tr:hover {
             background-color: #ddd;
         }
-        .headerSortUp:after {
-            content: ' ▲';
-        }
-        .headerSortDown:after {
-            content: ' ▼';
+        .sortSymbol {
+            margin-left: 5px;
+            color: #ddd; /* Lichtere kleur voor de pijltjes */
         }
     </style>
 </head>
 <body>
 
-<h2>F1 coureurs leeftijd, lengte en gewicht</h2>
 <table id="f1Table">
     <tr>
-        <th onclick="sortTable(0)">Coureur</th>
-        <th onclick="sortTable(1)">Team</th>
-        <th onclick="sortTable(2, 'int')">Leeftijd</th>
-        <th onclick="sortTable(3, 'int')">Lengte (cm)</th>
-        <th onclick="sortTable(4, 'int')">Gewicht (kg)</th>
+        <th onclick="sortTable(0)">Coureur<span class="sortSymbol">▲▼</span></th>
+        <th onclick="sortTable(1)">Team<span class="sortSymbol">▲▼</span></th>
+        <th onclick="sortTable(2, 'int')">Leeftijd<span class="sortSymbol">▲▼</span></th>
+        <th onclick="sortTable(3, 'int')">Lengte (cm)<span class="sortSymbol">▲▼</span></th>
+        <th onclick="sortTable(4, 'int')">Gewicht (kg)<span class="sortSymbol">▲▼</span></th>
     </tr>
   <tr><td>Max Verstappen</td><td>Red Bull Racing</td><td>26</td><td>181</td><td>72</td></tr>
   <tr><td>Sergio Perez</td><td>Red Bull Racing</td><td>34</td><td>173</td><td>63</td></tr>
